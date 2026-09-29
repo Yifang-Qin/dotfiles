@@ -1,29 +1,24 @@
-# Personal development environment
+# dotfiles
 
-使用 Git 保存配置，用 [Dotbot](https://github.com/anishathalye/dotbot) 将配置软链接到应用读取的位置。
-当前管理 WezTerm、Ghostty、Zed（设置和主题）以及 MiniMax Code 的自定义主题，配置从本机导入。
-Zed 的模型 provider、默认模型和 SSH 连接只保存在本机，不进仓库，见 [Zed](#zed)。
+我的 macOS 终端和编辑器配置，用 [Dotbot](https://github.com/anishathalye/dotbot) 软链接到各应用的配置目录。
 
-## 目录与映射
+## 包含什么
 
-| 仓库文件 | 安装位置 |
+| 仓库路径 | 链接到 |
 | --- | --- |
 | `wezterm/wezterm.lua` | `~/.wezterm.lua` |
-| `ghostty/config.ghostty` | `${XDG_CONFIG_HOME:-$HOME/.config}/ghostty/config.ghostty` |
+| `ghostty/config.ghostty` | `~/.config/ghostty/config.ghostty` |
 | `zed/settings.json` | `~/.config/zed/settings.json` |
-| `zed/themes/` | `~/.config/zed/themes`（整个目录） |
-| `mcode/themes/` | `~/.minimax/tui/themes`（整个目录） |
-| `install.conf.yaml` | Dotbot 链接清单 |
-| `dotbot/` | Git 子模块，固定在仓库记录的提交 |
+| `zed/themes/` | `~/.config/zed/themes` |
+| `mcode/themes/` | `~/.minimax/tui/themes` |
 
-主题目录整体链接，新增主题直接放进对应目录即可，无需重新运行 `./install`。
-Zed 在 macOS 上固定读取 `~/.config/zed`，不受 `XDG_CONFIG_HOME` 影响。
+链接清单在 `install.conf.yaml`，Dotbot 作为子模块放在 `dotbot/`。
+主题目录整体链接，新主题放进去就能用。
+Ghostty 的路径跟随 `XDG_CONFIG_HOME`，Zed 固定用 `~/.config/zed`。
 
-## 新机器安装
+## 安装
 
-需要 Git、Python 3，以及已安装的 WezTerm、Ghostty、Zed 和 MiniMax Code。
-当前配置使用 JetBrainsMono Nerd Font Mono；WezTerm 另有 macOS 的 PingFang SC 回退字体。
-macOS 可按需用 Homebrew 安装应用和字体（MiniMax Code 按其官方方式安装）：
+需要 Git、Python 3，以及 WezTerm、Ghostty、Zed、MiniMax Code 和 JetBrainsMono Nerd Font。
 
 ```sh
 brew install --cask wezterm ghostty zed font-jetbrains-mono-nerd-font
@@ -35,59 +30,38 @@ git config user.email 91451403+Yifang-Qin@users.noreply.github.com
 ./install
 ```
 
-仓库是公开的。克隆后先按上面设置本仓库的提交身份，用 GitHub 的 noreply 邮箱，避免全局邮箱进入公开历史。
-
-`./install` 可重复运行，支持从任意工作目录调用；首次运行会初始化缺失的 Dotbot 子模块。
-预览不会修改配置链接，但仍可能下载/初始化子模块。
-安装器会拒绝覆盖已有的普通文件或目录，请先比较并将旧配置移到仓库外的备份目录，再安装。
-已有软链接可重新指向本仓库。移动仓库后需要再次运行 `./install`。
-
-Ghostty 使用 `config.ghostty` 文件名，需要支持该文件名的版本（1.2.3+）。
-迁移时还要检查 Ghostty 旧的 `config` 文件和 macOS 的
-`~/Library/Application Support/com.mitchellh.ghostty/`，避免其他配置覆盖仓库设置。
-详见 [Ghostty 配置位置](https://ghostty.org/docs/config)。
-
-Zed 还需要手动创建本机的 `global_settings.json`，MiniMax Code 需要选择一次主题，见下方对应小节。
-
-当前配置保留 macOS 的标题栏、CMD 鼠标绑定、字体和窗口位置偏好。
-跨 macOS 机器可直接复用；迁移 Linux 时应按需要调整这些设置，并安装对应字体。
-安装器负责链接配置，不会安装应用或字体。
+- 两行 `git config` 让提交使用 GitHub 的 noreply 邮箱。
+- `./install` 可以重复运行。它不会覆盖已有的普通文件，先把旧配置挪走再装；仓库换了位置要重新运行。
+- Ghostty 需要 1.2.3+。旧的 `config` 文件和 `~/Library/Application Support/com.mitchellh.ghostty/` 里的配置要先移走。
+- 配置按 macOS 写的，在 Linux 上要调整标题栏、鼠标绑定和字体。
+- 装完还要为 Zed 创建 `global_settings.json`，并在 MiniMax Code 里选一次主题，见下文。
 
 ## Zed
 
-仓库管理 `settings.json` 和 `themes/`，扩展通过 `settings.json` 的 `auto_install_extensions` 声明。
-`themes/gruvbox-deep-dark.json` 基于 Zed 自带的 Gruvbox 主题修改，许可证见 `zed/LICENSE-gruvbox`。
-`zed/themes/` 里只放主题文件：Zed 会尝试把其中每个文件都当主题加载。
-以下本机配置放在 `~/.config/zed/global_settings.json`，不进仓库：
+仓库里放 `settings.json` 和主题，扩展用 `auto_install_extensions` 声明。
+模型和 SSH 相关的本机配置写在 `~/.config/zed/global_settings.json`，不进仓库：
 
-- `language_models`：模型 provider；
-- `agent.default_model`：默认模型（`agent.favorite_models` 等其他模型选择同理）；
-- `ssh_connections`：SSH 服务器和远程项目。
+- `language_models`
+- `agent.default_model`（以及 `agent.favorite_models`）
+- `ssh_connections`
 
-Zed 先读 `global_settings.json`，再用 `settings.json` 覆盖：对象逐字段合并，数组整体覆盖。
-Zed 不会修改 `global_settings.json`，界面上的改动都写入 `settings.json`，也就是仓库文件：
+Zed 会合并这两个文件，同一字段以 `settings.json` 为准。
 
-- 在 Agent 面板切换或收藏模型，会写入 `agent.default_model` 或 `agent.favorite_models`，
-  提交前用 `git diff` 检查并移回 `global_settings.json`；
-- 界面新增的 SSH 服务器会写入 `settings.json`，并整体遮盖 `global_settings.json` 里的列表，需要合并回去；
-- `global_settings.json` 里的服务器，在界面上改昵称、删除或记录新打开的目录都不会生效，需直接编辑该文件。
-
-新机器上需手动创建 `global_settings.json`；API Key 不在配置文件里，需在 Zed 中重新填写。
-`prompts/`（数据库）和 `~/Library/Application Support/Zed/`（扩展、缓存等运行数据）不纳入管理。
-以后新增 `keymap.json`、`tasks.json`、`snippets/` 等配置时，放进 `zed/` 并在 `install.conf.yaml` 添加映射。
+- 在界面里切换或收藏模型、新增 SSH 服务器，都会写进仓库里的 `settings.json`，新增的服务器还会盖掉本机列表。
+  提交前看一眼 `git diff`，把这些内容挪回 `global_settings.json`。
+- 本机列表里的 SSH 服务器在界面上改不了，直接编辑 `global_settings.json`。
+- API Key 不在配置文件里，新机器上要在 Zed 里重新填。
+- `zed/themes/` 里只放主题文件，Zed 会把其中每个文件都当主题加载。
+  `gruvbox-deep-dark.json` 改自 Zed 自带的 Gruvbox，许可证见 `zed/LICENSE-gruvbox`。
 
 ## MiniMax Code
 
-`mcode/themes/` 链接到 mcode 默认数据目录下的 `~/.minimax/tui/themes`
-（设置了 `MINIMAX_DATA_DIR` 时需相应修改映射）。mcode 启动时加载其中的主题，文件变化时自动重载。
-当前选用的主题记录在 `~/.minimax/tui/tui-settings.json`；mcode 会整体替换该文件，不适合软链接，
-新机器上用 `/theme` 选择一次 Gruvbox MCode Dark。
+`mcode/themes/` 链接到 `~/.minimax/tui/themes`；设置了 `MINIMAX_DATA_DIR` 的话要改映射。
+当前用哪个主题记在 `~/.minimax/tui/tui-settings.json`，这个文件不进仓库，新机器上用 `/theme` 选一次 Gruvbox MCode Dark。
 
-## 日常修改和同步
+## 日常使用
 
-直接编辑仓库里的配置文件，应用会通过软链接读取相同内容。
-WezTerm 通常自动重载配置；Ghostty 在 macOS 上按 `Cmd+Shift+,` 重载，部分设置需新建窗口；
-Zed 会自动重载设置和主题，MiniMax Code 会自动重载主题。
+直接改仓库里的文件。WezTerm、Zed 和 MiniMax Code 会自动重载，Ghostty 按 `Cmd+Shift+,`。
 
 ```sh
 git diff
@@ -96,25 +70,23 @@ TZ=UTC git commit -m "Update configuration"
 git push
 ```
 
-提交时加 `TZ=UTC`，让公开历史里的时间戳不带本地时区。
-
-另一台机器更新：
+`TZ=UTC` 让提交时间不带本地时区。其他机器上同步：
 
 ```sh
 git pull --ff-only
 ./install
 ```
 
-当前没有配置自动同步任务。
-
 ## 备份与恢复
 
-本机首次接管前的原始配置保存在 `~/.local/state/dotfiles-backups/` 下带时间戳的目录。
-恢复时先用 `ls -l` 确认目标是本仓库创建的软链接，删除对应链接，再将备份复制回原位置。
-不要直接覆盖软链接写入备份，否则会改到仓库源文件。
-Zed 的 `global_settings.json` 只在本机，重装或迁移前请自行备份。
+本机接管前的原配置备份在 `~/.local/state/dotfiles-backups/` 下的时间戳目录里。
+恢复时先删掉对应的软链接，再把备份复制回去。不要直接往软链接里写，那会改到仓库文件。
+`global_settings.json` 只在本机，记得自己备份。
 
-## 扩展其他工具
+## 添加新工具
 
-每个工具建立独立目录，将配置加入 Git，再在 `install.conf.yaml` 添加映射。
-密钥、令牌和机器私有数据应保留在仓库外。
+给工具建一个目录放配置，再在 `install.conf.yaml` 加一行映射。密钥和本机私有数据不要放进仓库。
+
+## 致谢
+
+受 [magic3007/dotfiles](https://github.com/magic3007/dotfiles) 启发，同样用 Dotbot 管理。
