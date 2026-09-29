@@ -1,0 +1,20 @@
+theme = Gruvbox Dark
+font-family = JetBrainsMono Nerd Font Mono
+font-size = 18
+
+cursor-style = block
+shell-integration-features = no-cursor
+
+window-width = 90
+window-height = 20
+window-save-state = never
+window-position-x = 220
+window-position-y = 140
+
+macos-titlebar-style = tabs
+window-padding-x = 0
+window-padding-y = 0
+
+copy-on-select = clipboard
+
+auto-update-channel = tip

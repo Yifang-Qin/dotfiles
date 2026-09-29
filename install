@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+BASEDIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
+command -v python3 >/dev/null || { echo 'Python 3 is required.' >&2; exit 1; }
+
+cd "$BASEDIR"
+git submodule update --init --recursive -- dotbot
+exec python3 "$BASEDIR/dotbot/bin/dotbot" \
+  -d "$BASEDIR" -c "$BASEDIR/install.conf.yaml" "$@"

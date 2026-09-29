@@ -1,0 +1,13 @@
+- defaults:
+    link:
+      create: true
+      relink: true
+      force: false
+
+- link:
+    ~/.wezterm.lua: wezterm/wezterm.lua
+    ${XDG_CONFIG_HOME}/ghostty/config.ghostty: ghostty/config.ghostty
+    # Zed 在 macOS 上固定读取 ~/.config/zed，不受 XDG_CONFIG_HOME 影响
+    ~/.config/zed/settings.json: zed/settings.json
+    ~/.config/zed/themes: zed/themes
+    ~/.minimax/tui/themes: mcode/themes
