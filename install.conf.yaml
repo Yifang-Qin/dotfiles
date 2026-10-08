@@ -11,3 +11,4 @@
     ~/.config/zed/settings.json: zed/settings.json
     ~/.config/zed/themes: zed/themes
     ~/.minimax/tui/themes: mcode/themes
+    ~/.omp/agent/themes: omp/themes
