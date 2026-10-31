@@ -12,6 +12,7 @@
 | `zed/themes/` | `~/.config/zed/themes` |
 | `mcode/themes/` | `~/.minimax/tui/themes` |
 | `omp/themes/` | `~/.omp/agent/themes` |
+| `kimi/themes/` | `~/.kimi-code/themes` |
 
 链接清单在 `install.conf.yaml`，Dotbot 作为子模块放在 `dotbot/`。
 主题目录整体链接，新主题放进去就能用。
@@ -19,7 +20,7 @@ Ghostty 的路径跟随 `XDG_CONFIG_HOME`，Zed 固定用 `~/.config/zed`。
 
 ## 安装
 
-需要 Git、Python 3，以及 WezTerm、Ghostty、Zed、MiniMax Code、omp 和 JetBrainsMono Nerd Font。
+需要 Git、Python 3，以及 WezTerm、Ghostty、Zed、MiniMax Code、omp、Kimi Code 和 JetBrainsMono Nerd Font。
 
 ```sh
 brew install --cask wezterm ghostty zed font-jetbrains-mono-nerd-font
@@ -35,7 +36,7 @@ git config user.email 91451403+Yifang-Qin@users.noreply.github.com
 - `./install` 可以重复运行。它不会覆盖已有的普通文件，先把旧配置挪走再装；仓库换了位置要重新运行。
 - Ghostty 需要 1.2.3+。旧的 `config` 文件和 `~/Library/Application Support/com.mitchellh.ghostty/` 里的配置要先移走。
 - 配置按 macOS 写的，在 Linux 上要调整标题栏、鼠标绑定和字体。
-- 装完还要为 Zed 创建 `global_settings.json`，并在 MiniMax Code 和 omp 里各选一次主题，见下文。
+- 装完还要为 Zed 创建 `global_settings.json`，并在 MiniMax Code、omp 和 Kimi Code 里各选一次主题，见下文。
 
 ## Zed
 
@@ -65,13 +66,19 @@ Zed 会合并这两个文件，同一字段以 `settings.json` 为准。
 `omp/themes/` 链接到 `~/.omp/agent/themes`，只管主题文件。
 当前主题记在 `~/.omp/agent/config.yml` 的 `theme.dark` 里。这个文件还存着模型和角色等本机配置，不进仓库，新机器上在 omp 设置里选一次 `gruvbox-dark`。
 
+## Kimi Code
+
+`kimi/themes/` 链接到 `~/.kimi-code/themes`；设置了 `KIMI_CODE_HOME` 的话要改映射。
+当前主题记在 `~/.kimi-code/tui.toml` 的 `theme` 里。这个文件由 Kimi 自己改写，还存着编辑器和通知等本机偏好，不进仓库，新机器上用 `/theme` 选一次 `Custom: gruvbox-dark`。
+改了正在使用的主题不会自动重载，要运行 `/reload-tui`。
+
 ## 日常使用
 
 直接改仓库里的文件。WezTerm、Zed 和 MiniMax Code 会自动重载，Ghostty 按 `Cmd+Shift+,`。
 
 ```sh
 git diff
-git add wezterm ghostty zed mcode omp
+git add wezterm ghostty zed mcode omp kimi
 TZ=UTC git commit -m "Update configuration"
 git push
 ```

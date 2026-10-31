@@ -1,0 +1,26 @@
+{
+  "name": "gruvbox-dark",
+  "displayName": "Gruvbox Dark",
+  "base": "dark",
+  "colors": {
+    "primary": "#83A598",
+    "accent": "#8EC07C",
+    "text": "#EBDBB2",
+    "textStrong": "#F9F5D7",
+    "textDim": "#928374",
+    "textMuted": "#7C6F64",
+    "border": "#665C54",
+    "borderFocus": "#FABD2F",
+    "success": "#B8BB26",
+    "warning": "#FABD2F",
+    "error": "#FB4934",
+    "diffAdded": "#98971A",
+    "diffRemoved": "#CC241D",
+    "diffAddedStrong": "#B8BB26",
+    "diffRemovedStrong": "#FB4934",
+    "diffGutter": "#7C6F64",
+    "diffMeta": "#928374",
+    "roleUser": "#FABD2F",
+    "shellMode": "#B8BB26"
+  }
+}
